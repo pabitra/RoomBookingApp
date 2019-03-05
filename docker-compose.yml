@@ -1,0 +1,43 @@
+version: '3.1'
+
+services:
+  db:
+    container_name: postgres_001
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRS_PASSWORD: pabitra@123
+      POSTGRES_DB: roombooking
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - "15432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    
+  RoomBookingApp:
+    build: .
+    image: roombookingapp
+    command: ["./wait-for-postgres.sh", "db", "sh", "./start.sh"]
+    ports: 
+      - "3000:3000"
+    depends_on:
+      - "db"
+    links:
+      - db:db
+    environment:
+      FILLA_DB_USER: pabitra
+      FILLA_DB_PASSWORD: abc@123
+      DB_PASSWORD: pabitra@123
+      DB_USER: postgres
+      DB_NAME: roombooking
+      DB_HOST: postgres_001
+      NODE_ENV: production
+      
+volumes:
+  pgdata: {}
+      

@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.18.0 (06a2e56)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: roombookingapp
+  name: roombookingapp
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        io.kompose.service: roombookingapp
+    spec:
+      containers:
+      - args:
+        - ./wait-for-postgres.sh
+        - db
+        - sh
+        - ./start.sh
+        env:
+        - name: DB_HOST
+          value: postgres_001
+        - name: DB_NAME
+          value: roombooking
+        - name: DB_PASSWORD
+          value: pabitra@123
+        - name: DB_USER
+          value: postgres
+        - name: FILLA_DB_PASSWORD
+          value: abc@123
+        - name: FILLA_DB_USER
+          value: pabitra
+        - name: NODE_ENV
+          value: production
+        image: roombookingapp
+        name: roombookingapp
+        ports:
+        - containerPort: 3000
+        resources: {}
+      restartPolicy: Always
+status: {}
