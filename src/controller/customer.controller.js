@@ -1,18 +1,9 @@
-const { check, validationResult } = require('express-validator/check');
-var customerdbAcess = require('../db/knex.customer');
 
-var postValidation = function (req, res, next){
-    check('firstname').isEmpty().withMessage('must be a valid test');
-    check('lastname').isEmpty();
-    check('email').isEmpty().isEmail();
-    try {
-        validationResult(req).throw();
-        next();
-    } catch (err) {
-        res.status(422).json({ errors: err.mapped() });
-    }
-};
+'use strict';
 
+const customerdbAcess = require('../db/knex.customer');
+const schemaCollection = require('../validation/validation.schema');
+const Joi = require('Joi');
 var getAllCustomers = function (req, res, next) {
     customerdbAcess.getAll()
         .then(function (shows) {
@@ -24,29 +15,58 @@ var getAllCustomers = function (req, res, next) {
 };
 
 var getCustomerbyId = function (req, res, next) {
-    
+
     customerdbAcess.getSingle(req.params.id)
         .then(function (show) {
             res.status(200).json(show);
         })
         .catch(function (error) {
             next(error);
-    });
-    
+        });
+
 };
 
 var createCustomer = function (req, res, next) {
-    
-    customerdbAcess.add(req.body)
-        .then(function (customerID) {
-            return customerdbAcess.getSingle(customerID);
-        })
-        .then(function (customer) {
-            res.json(customer);
-        })
-        .catch(function (error) {
-            next(error);
+    try {
+        let data = req.body;
+        Joi.validate(data, schemaCollection.customerSchema, (err, value) => {
+
+            if (err) {
+
+                let errMsg = err.details.map(d => {
+                    return d.message;
+                });
+
+                // send a 422 error response if validation fails
+                res.status(422).json({
+                    status: 'error',
+                    message: 'Invalid request data',
+                    data: errMsg
+                });
+
+            } else {
+                customerdbAcess.add(req.body)
+                    .then(function (customerID) {
+                        return customerdbAcess.getSingle(customerID);
+                    })
+                    .then(function (customer) {
+                        res.json(customer);
+                    })
+                    .catch(function (error) {
+                        res.status(500).json({
+                            status: 'error',
+                            message: 'Internal server error',
+                            data: error
+                        });
+                    });
+
+            }
+
         });
+
+    } catch (error) {
+        res.json(error);
+    }
 };
 
 var updateCustomer = function (req, res, next) {
@@ -66,7 +86,6 @@ var updateCustomer = function (req, res, next) {
             next(error);
         });
 };
-
 var deleteCustomer = function (req, res, next) {
     customerdbAcess.getSingle(req.params.id)
         .then(function (show) {
@@ -87,6 +106,5 @@ module.exports = {
     getCustomerbyId: getCustomerbyId,
     createCustomer: createCustomer,
     updateCustomer: updateCustomer,
-    deleteCustomer: deleteCustomer,
-    postValidation: postValidation
+    deleteCustomer: deleteCustomer
 };

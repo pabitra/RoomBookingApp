@@ -1,3 +1,5 @@
+'use strict';
+
 var knex = require('./knex.js');
 
 function Rooms() {
@@ -21,7 +23,7 @@ function update(roomId, updates) {
 }
 
 function deleteItem(roomId) {
-    return Customers().where('id', parseInt(roomId)).del();
+    return Rooms().where('id', parseInt(roomId)).del();
 }
 
 

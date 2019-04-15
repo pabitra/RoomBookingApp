@@ -1,4 +1,6 @@
-var knex = require('./knex.js');
+'use strict';
+
+const knex = require('./knex.js');
 
 function Customers() {
     return knex('customers');
@@ -23,7 +25,6 @@ function update(customerId, updates) {
 function deleteItem(customerId) {
     return Customers().where('id', parseInt(customerId)).del();
 }
-
 
 module.exports = {
     getAll: getAll,

@@ -1,3 +1,5 @@
+'use strict';
+
 var knex = require('./knex.js');
 
 function Bookings() {

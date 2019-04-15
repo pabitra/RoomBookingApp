@@ -1,5 +1,5 @@
 var express = require('express');
-const { check, validationResult } = require('express-validator/check');
+
 var router = express.Router();
 
 var customerController = require('../controller/customer.controller');
@@ -11,7 +11,7 @@ router.get('/customers', customerController.getAllCustomers );
 router.get('/customers/:id', customerController.getCustomerbyId);
 
 // *** add show *** //
-router.post('/customers', customerController.postValidation, customerController.createCustomer);
+router.post('/customers', customerController.createCustomer);
 
 // *** update show *** //
 router.put('/customers/:id', customerController.updateCustomer);
