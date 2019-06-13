@@ -20,7 +20,7 @@ services:
       - pgdata:/var/lib/postgresql/data
     
   RoomBookingApp:
-    build: ./src
+    build: ./
     image: roombookingapp
     command: ["./wait-for-postgres.sh", "db", "sh", "./start.sh"]
     ports: 

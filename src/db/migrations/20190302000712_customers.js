@@ -8,8 +8,8 @@ exports.up = function(knex, Promise) {
         table.datetime('dob').notNullable();
         table.string('email', 100).notNullable().unique();
         table.string('password', 8).notNullable();
-        table.string('status', 10).notNullable();
-        table.integer('phone', 10).Nullable();
+        table.integer('status').notNullable();
+        table.string('phone', 12).nullable();
       });
 };
 

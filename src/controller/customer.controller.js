@@ -3,7 +3,7 @@
 
 const customerdbAcess = require('../db/knex.customer');
 const schemaCollection = require('../validation/validation.schema');
-const Joi = require('Joi');
+const Joi = require('@hapi/joi');
 var getAllCustomers = function (req, res, next) {
     customerdbAcess.getAll()
         .then(function (shows) {

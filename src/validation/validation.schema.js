@@ -1,6 +1,6 @@
 'use strict';
 
-const joi  = require('Joi');
+const joi  = require('@hapi/joi');
 
 const alphaNum = joi.string().alphanum();
 const integer = joi.number().integer();
@@ -8,7 +8,7 @@ const nameSchema = alphaNum.min(2).max(30);
 const surnameSchema = alphaNum.min(2).max(50);
 const yearSchema = integer.min(1900).max(2013);
 const dateSchema = joi.date().min('1-1-1974');
-const emailSchema = joi.string().email({ minDomainAtoms: 2 }).max(100);
+const emailSchema = joi.string().email({ minDomainSegments: 2 }).max(100);
 const passwordSchema = joi.string().alphanum().min(5).max(10).regex(/^[a-zA-Z0-9]{3,30}$/);
 
 const customerSchema = joi.object().keys({

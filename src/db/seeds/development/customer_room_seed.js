@@ -11,6 +11,6 @@ exports.seed = function(knex, Promise) {
 
     knex('customers').del(),
     
-    knex('customers').insert({firstname: 'ram', lastname:'prasad', dob: '08/03/1987', email:'ram.prasad@gmail.com', password: 'kuch001'})
+    knex('customers').insert({username:'ram.prasad', firstname: 'ram', lastname:'prasad', dob: '08/03/1987', email:'ram.prasad@gmail.com', password: 'kuch001', status:1, phone:9176190000})
   );
 };
