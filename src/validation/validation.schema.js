@@ -29,8 +29,6 @@ const bookingSchema = joi.object().keys({
     mail: emailSchema
 });
 
-
-
 const roomSchema = joi.object().keys({
 
 });
